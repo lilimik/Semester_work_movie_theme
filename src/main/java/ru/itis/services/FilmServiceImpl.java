@@ -75,36 +75,25 @@ public class FilmServiceImpl implements FilmService {
         return getFilmsFromFilmsRO(filmsRO);
     }
 
-//    @Override
-//    public List<String> findGenresByFilmTitle(String filmTitle) {
-//        Film film = findFilmByTitle(filmTitle);
-//        List<Integer> genresId = genreService.findGenresIdByFilmId(filmId);
-//        List<String> genresName = new LinkedList<>();
-//        if (!genresId.isEmpty()) {
-//            for (Integer genreId : genresId) {
-//                genresName.add(genreService.findNameById(genreId));
-//            }
-//        }
-//        return genresName;
-//    }
+    @Override
+    public List<String> findGenresByFilmTitle(String filmTitle) {
+        List<FilmRO> filmsRO = filmsRepository.findGenresByFilmTitle(filmTitle);
+        List<String> genres = new LinkedList<>();
+        filmsRO.forEach(filmRO -> genres.addAll(filmRO.getGenresList()));
+        return genres;
+    }
 
-//    @Override
-//    public List<String> findCountriesByFilmTitle(String filmTitle) {
-//        Long filmId = findFilmIdByTitle(filmTitle);
-//        List<Integer> countriesId = countryService.findCountriesIdByFilmId(filmId);
-//        List<String> countriesName = new LinkedList<>();
-//        if (!countriesId.isEmpty()) {
-//            for (Integer countryId : countriesId) {
-//                countriesName.add(countryService.findNameById(countryId));
-//            }
-//        }
-//        return countriesName;
-//    }
+    @Override
+    public List<String> findCountriesByFilmTitle(String filmTitle) {
+        List<FilmRO> filmsRO = filmsRepository.findGenresByFilmTitle(filmTitle);
+        List<String> countries = new LinkedList<>();
+        filmsRO.forEach(filmRO -> countries.addAll(filmRO.getCountryList()));
+        return countries;
+    }
 
     @Override
     public List<Film> findFilmsByYear(Short year) {
         return filmsRepository.findFilmsByYear(year);
     }
-
 
 }

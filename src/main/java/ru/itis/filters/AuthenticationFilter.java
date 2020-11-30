@@ -23,8 +23,8 @@ public class AuthenticationFilter implements Filter {
 
         Boolean isAuthenticated = false;
         boolean sessionExists = session != null;
-        Boolean isLoginPage = request.getRequestURI().equals("/signIn");
-        Boolean isRegisterPage = request.getRequestURI().equals("/signUp");
+        boolean isLoginPage = request.getRequestURI().equals("/signIn");
+        boolean isRegisterPage = request.getRequestURI().equals("/signUp");
         boolean isRootPage = request.getRequestURI().equals("/");
         boolean isStaticResource = request.getRequestURI().startsWith("/WebContent");
 

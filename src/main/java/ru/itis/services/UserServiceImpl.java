@@ -15,11 +15,13 @@ public class UserServiceImpl implements UserService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final CookieService cookieService;
+    private final FilesService filesService;
 
-    public UserServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder, CookieService cookieService) {
+    public UserServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder, CookieService cookieService, FilesService filesService) {
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
         this.cookieService = cookieService;
+        this.filesService = filesService;
     }
 
     @Override
@@ -30,7 +32,8 @@ public class UserServiceImpl implements UserService {
                 .lastName(form.getLastName())
                 .hashPassword(passwordEncoder.encode(form.getPassword()))
                 .build();
-        usersRepository.save(user);
+        Long accountId = usersRepository.saveAndReturnId(user);
+        filesService.saveDefaultAvatarToStorage(accountId);
     }
 
     @Override
@@ -58,6 +61,11 @@ public class UserServiceImpl implements UserService {
                 user = optionalUser.get();
         }
         return user;
+    }
+
+    @Override
+    public void createDefaultAvatar() {
+
     }
 
 

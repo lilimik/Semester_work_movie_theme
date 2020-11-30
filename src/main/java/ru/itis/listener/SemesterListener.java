@@ -21,7 +21,7 @@ public class SemesterListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        ServletContext servletContext = servletContextEvent.getServletContext();
+        ServletContext context = servletContextEvent.getServletContext();
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
         dataSource.setDriverClassName(DB_DRIVER);
@@ -37,18 +37,22 @@ public class SemesterListener implements ServletContextListener {
         FilmGenresRepository filmGenresRepository = new FilmGenresRepositoryImpl(dataSource);
         FilmCountriesRepository filmCountriesRepository = new FilmCountriesRepositoryImpl(dataSource);
         FilmsRepository filmsRepository = new FilmsRepositoryImpl(dataSource);
+        AvatarRepository avatarRepository = new AvatarRepositoryImpl(dataSource);
+        PosterRepository posterRepository = new PostersRepositoryImpl(dataSource);
         PersonsRepository personsRepository = new PersonsRepositoryImpl(dataSource);
 
         CountryService countryService = new CountryServiceImpl(countriesRepository);
         GenreService genreService = new GenreServiceImpl(genresRepository);
         FilmService filmService = new FilmServiceImpl(filmsRepository, filmGenresRepository, filmCountriesRepository , genreService, countryService);
         CookieService cookieService = new CookieServiceImpl(cookiesRepository);
-        UserService userService = new UserServiceImpl(usersRepository, passwordEncoder, cookieService);
+        FilesService filesService = new FilesServiceImpl(avatarRepository, posterRepository);
+        UserService userService = new UserServiceImpl(usersRepository, passwordEncoder, cookieService, filesService);
 
-        servletContext.setAttribute("userService", userService);
-        servletContext.setAttribute("cookieService", cookieService);
-        servletContext.setAttribute("genreService", genreService);
-        servletContext.setAttribute("filmService", filmService);
+        context.setAttribute("filesUploadService", filesService);
+        context.setAttribute("userService", userService);
+        context.setAttribute("cookieService", cookieService);
+        context.setAttribute("genreService", genreService);
+        context.setAttribute("filmService", filmService);
 
     }
 

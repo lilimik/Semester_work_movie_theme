@@ -11,8 +11,8 @@ import lombok.*;
 public class Film {
     private Long id;
     private String title;
-    private Long boxOffice;
-    private Long budget;
+    private String boxOffice;
+    private String budget;
     private String description;
     private Short year;
     private Byte restriction;

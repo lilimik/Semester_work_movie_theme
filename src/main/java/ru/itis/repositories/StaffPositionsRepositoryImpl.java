@@ -21,7 +21,6 @@ public class StaffPositionsRepositoryImpl implements StaffPositionsRepository {
     private static final String SQL_INSERT_STAFF_POSITION = "insert into staff_positions(description) values (?)";
     private static final String SQL_DELETE_DESCRIPTION_BY_ID = "delete from staff_positions where id = ?";
     private static final String SQL_FIND_BY_ID = "select * from staff_positions";
-    private static final String SQL_FIND_ID_BY_NAME
 
     RowMapper<StaffPosition> staffPositionRowMapper = (row, rowNumber) -> StaffPosition.builder()
             .id(row.getShort("id"))
@@ -39,7 +38,7 @@ public class StaffPositionsRepositoryImpl implements StaffPositionsRepository {
 
     @Override
     public void delete(Long id) {
-        jdbcTemplate.update(SQL_DELETE_DESCRIPTION_BY_ID, id)
+        jdbcTemplate.update(SQL_DELETE_DESCRIPTION_BY_ID, id);
     }
 
     @Override

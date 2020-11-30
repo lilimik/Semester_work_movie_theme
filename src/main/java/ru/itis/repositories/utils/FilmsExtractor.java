@@ -15,8 +15,8 @@ public class FilmsExtractor extends AbstractHasManyExtractor<Film, Map<String, S
         return Film.builder()
                 .id(resultSet.getLong("id"))
                 .title(resultSet.getString("title"))
-                .boxOffice(resultSet.getLong("box_office"))
-                .budget(resultSet.getLong("budget"))
+                .boxOffice(resultSet.getString("box_office"))
+                .budget(resultSet.getString("budget"))
                 .description(resultSet.getString("description"))
                 .year(resultSet.getShort("year"))
                 .restriction(resultSet.getByte("restriction_age"))
@@ -26,8 +26,8 @@ public class FilmsExtractor extends AbstractHasManyExtractor<Film, Map<String, S
     @Override
     public Map<String, String> buildManyModel(ResultSet resultSet) throws SQLException {
         Map<String, String> map = new HashMap<>();
-        map.put("genre", resultSet.getString("genre_name"));
-        map.put("country", resultSet.getString("country_name"));
+            map.put("genre", resultSet.getString("genre_name"));
+            map.put("country", resultSet.getString("country_name"));
         return map;
     }
 

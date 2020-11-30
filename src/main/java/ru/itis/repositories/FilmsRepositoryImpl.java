@@ -24,15 +24,16 @@ public class FilmsRepositoryImpl implements FilmsRepository {
     private static final String SQL_FIND_ALL = "select * from films";
     private static final String SQL_FIND_BY_ID = "select * from films where id = ?";
     private static final String SQL_FIND_FILM_ID_BY_TITLE = "select * from films where title = ?";
-    public static final String SQL_FIND_FILMS_BY_GENRES = "select f.*,g.name genre_name from films f join film_genres fg on f.id = fg.film_id join genres g on fg.genre_id = g.id where g.name = ?";
-    public static final String SQL_FIND_FILMS_BY_COUNTRIES = "select f.*,c.name country_name from films f join film_countries fc on f.id = fc.film_id join countries c on fc.country_id = c.id where c.name = ?";
-
+    private static final String SQL_FIND_FILMS_BY = "select f.*,g.name genre_name, c.name country_name from films f join film_genres fg on f.id = fg.film_id join genres g on fg.genre_id = g.id join film_countries fc on f.id = fc.film_id join countries c on fc.country_id = c.id where ";
+    private static final String SQL_BY_GENRES = "g.name = ?";
+    private static final String SQL_BY_COUNTRIES = "c.name = ?";
+    private static final String SQL_FIND_GENRES_COUNTRIES_BY_FILM = "select f.*,g.name genre_name, c.name country_name from films f join film_genres fg on f.id = fg.film_id join genres g on fg.genre_id = g.id join film_countries fc on f.id = fc.film_id join countries c on fc.country_id = c.id where f.title = ?";
 
     RowMapper<Film> filmRowMapper = (row, rowNumber) -> Film.builder()
             .id(row.getLong("id"))
             .title(row.getString("title"))
-            .boxOffice(row.getLong("box_office"))
-            .budget(row.getLong("budget"))
+            .boxOffice(row.getString("box_office"))
+            .budget(row.getString("budget"))
             .description(row.getString("description"))
             .year(row.getShort("year"))
             .restriction(row.getByte("restriction_age"))
@@ -50,7 +51,6 @@ public class FilmsRepositoryImpl implements FilmsRepository {
 
     @Override
     public void delete(Long id) {
-
         jdbcTemplate.update(SQL_DELETE_FILM_BY_ID, id);
     }
 
@@ -76,11 +76,21 @@ public class FilmsRepositoryImpl implements FilmsRepository {
 
     @Override
     public List<FilmRO> findFilmsByGenreName(String genreName) {
-        return jdbcTemplate.query(SQL_FIND_FILMS_BY_GENRES, new FilmsExtractor());
+        return jdbcTemplate.query(SQL_FIND_FILMS_BY + SQL_BY_GENRES, new FilmsExtractor(), genreName);
     }
 
     @Override
     public List<FilmRO> findFilmsByCountryName(String countryName) {
-        return jdbcTemplate.query(SQL_FIND_FILMS_BY_COUNTRIES, new FilmsExtractor());
+        return jdbcTemplate.query(SQL_FIND_FILMS_BY + SQL_BY_COUNTRIES, new FilmsExtractor(), countryName);
+    }
+
+    @Override
+    public List<FilmRO> findGenresByFilmTitle(String filmTitle) {
+        return jdbcTemplate.query(SQL_FIND_GENRES_COUNTRIES_BY_FILM, new FilmsExtractor(), filmTitle);
+    }
+
+    @Override
+    public List<FilmRO> findCountriesByFilmTitle(String filmTitle) {
+        return jdbcTemplate.query(SQL_FIND_GENRES_COUNTRIES_BY_FILM, new FilmsExtractor(),filmTitle);
     }
 }

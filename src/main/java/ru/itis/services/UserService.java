@@ -8,4 +8,5 @@ public interface UserService {
     void signUp(SignUpForm form);
     String signIn(SignInForm form);
     User getUserByUUID(String uuid);
+    void createDefaultAvatar();
 }
