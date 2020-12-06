@@ -42,10 +42,10 @@ public class AvatarRepositoryImpl implements AvatarRepository {
     }
 
     @Override
-    public int updateAvatar(FileInfo fileInfo) {
+    public int updateAvatar(FileInfo entity) {
         int affectedRows = 0;
         try {
-            affectedRows = jdbcTemplate.update(SQL_UPDATE_AVATAR_BY_ID, fileInfo.getOriginalName(), fileInfo.getStorageName(), fileInfo.getType(), fileInfo.getSize(), fileInfo.getFkId());
+            affectedRows = jdbcTemplate.update(SQL_UPDATE_AVATAR_BY_ID, entity.getOriginalName(), entity.getStorageName(), entity.getType(), entity.getSize(), entity.getFkId());
         } catch (Exception e) {
             return affectedRows;
         }
@@ -55,7 +55,7 @@ public class AvatarRepositoryImpl implements AvatarRepository {
     @Override
     public void saveDefaultAvatar(Long accountId) {
         String OriginalName = "anon.png";
-        String type = "image/png";
+        String type = "anon/png";
         Path path = Paths.get("WebContent//avatars//anon.png");
         long size = 0L;
         try {

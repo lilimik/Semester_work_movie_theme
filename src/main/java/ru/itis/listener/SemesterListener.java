@@ -40,7 +40,9 @@ public class SemesterListener implements ServletContextListener {
         AvatarRepository avatarRepository = new AvatarRepositoryImpl(dataSource);
         PosterRepository posterRepository = new PostersRepositoryImpl(dataSource);
         PersonsRepository personsRepository = new PersonsRepositoryImpl(dataSource);
+        RestrictionsRepository restrictionsRepository = new RestrictionsRepositoryImpl(dataSource);
 
+        RestrictionService restrictionService = new RestrictionServiceImpl(restrictionsRepository);
         CountryService countryService = new CountryServiceImpl(countriesRepository);
         GenreService genreService = new GenreServiceImpl(genresRepository);
         FilmService filmService = new FilmServiceImpl(filmsRepository, filmGenresRepository, filmCountriesRepository , genreService, countryService);
@@ -48,9 +50,11 @@ public class SemesterListener implements ServletContextListener {
         FilesService filesService = new FilesServiceImpl(avatarRepository, posterRepository);
         UserService userService = new UserServiceImpl(usersRepository, passwordEncoder, cookieService, filesService);
 
-        context.setAttribute("filesUploadService", filesService);
+        context.setAttribute("restrictionService", restrictionService);
+        context.setAttribute("filesService", filesService);
         context.setAttribute("userService", userService);
         context.setAttribute("cookieService", cookieService);
+        context.setAttribute("countryService", countryService);
         context.setAttribute("genreService", genreService);
         context.setAttribute("filmService", filmService);
 

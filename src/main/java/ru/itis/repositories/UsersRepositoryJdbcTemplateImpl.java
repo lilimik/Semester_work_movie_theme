@@ -26,6 +26,8 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository {
     private static final String SQL_INSERT_USER_AND_RETURN = "insert into account(email, first_name, last_name, hash_password) values (?, ?, ?, ?) returning id";
     private static final String SQL_FIND_BY_ID = "select * from account where id = ?";
     private static final String SQL_DELETE_USER_BY_ID = "delete from account where id = ?";
+    private static final String SQL_UPDATE_USER = "update account set first_name = ?, last_name = ? where id = ?";
+    private static final String SQL_UPDATE_USER_PASSWORD = "update account set hash_password = ? where id = ?";
 
     private final RowMapper<User> userRowMapper = (row, rowNumber) -> User.builder()
             .id(row.getLong("id"))
@@ -56,7 +58,7 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository {
             ps.setString(2, entity.getFirstName());
             ps.setString(3, entity.getLastName());
             ps.setString(4, entity.getHashPassword());
-            int affectedRows = ps.executeUpdate();
+            ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             long id = 0L;
             while (rs.next()) {
@@ -70,6 +72,10 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository {
 
     @Override
     public void update(User entity) {
+        jdbcTemplate.update(SQL_UPDATE_USER, entity.getFirstName(), entity.getLastName(), entity.getId());
+            if (entity.getHashPassword() != null) {
+            jdbcTemplate.update(SQL_UPDATE_USER_PASSWORD, entity.getHashPassword(), entity.getId());
+        }
     }
 
     @Override

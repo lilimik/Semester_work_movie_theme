@@ -4,8 +4,10 @@ import ru.itis.models.FileInfo;
 import ru.itis.repositories.AvatarRepository;
 import ru.itis.repositories.PosterRepository;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -21,13 +23,13 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
-    public void saveAvatarToStorage(InputStream file, String originalFileName, String storageFileName, String contentType, Long size) {
+    public void saveAvatarToStorage(InputStream file, Long userId, String originalFileName, String storageFileName, String contentType, Long size) {
         FileInfo fileInfo = FileInfo.builder()
-                .fkId(Long.parseLong(storageFileName))
+                .fkId(userId)
                 .originalName(originalFileName)
                 .storageName(storageFileName)
-                .size(size)
                 .type(contentType)
+                .size(size)
                 .build();
 
         try {
@@ -56,8 +58,26 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
-    public Optional<FileInfo> getAvatarInfo(Long fkId) {
-        return avatarRepository.findById(fkId);
+    public void writeFileToStorage(Long fkId, OutputStream outputStream) {
+        FileInfo fileInfo = getAvatarInfo(fkId);
+        File file = new File("C:/Users/kazak/IdeaProjects/Semester/src/main/webapp/" +
+                fileInfo.getStorageName());
+        System.out.println(file.toPath());
+        try {
+            Files.copy(file.toPath(), outputStream);
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public FileInfo getAvatarInfo(Long fkId) {
+        FileInfo fileInfo = null;
+        Optional<FileInfo> optionalFileInfo = avatarRepository.findById(fkId);
+        if (optionalFileInfo.isPresent()) {
+            fileInfo = optionalFileInfo.get();
+        }
+        return fileInfo;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package ru.itis.services;
 
 import ru.itis.models.Genre;
-import ru.itis.repositories.FilmGenresRepository;
 import ru.itis.repositories.GenresRepository;
 
 import java.util.List;

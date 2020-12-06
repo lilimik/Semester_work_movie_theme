@@ -24,7 +24,6 @@
 
 <%
     User user = (User) request.getAttribute("user");
-    String userAvatar = (String) request.getAttribute("userAvatar");
 %>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -44,24 +43,27 @@
     <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
         <div class="justify-content-center">
             <ul class="navbar-nav">
+                <img src="${pageContext.request.contextPath}/avatar?id=<%=user.getId()%>"
+                     alt="avatar" style="width: 50px; height: 50px;">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
                        data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        Авторизация
+                        Аккаунт
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/signIn">Вход</a>
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/signUp">Регистрация</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Профиль</a>
+                        <a class="dropdown-item text-danger"
+                           href="${pageContext.request.contextPath}/logOut">Выйти</a>
                     </div>
-                </li>
             </ul>
         </div>
         <div class="d-flex justify-content-end">
-            <form class="form-inline my-2 my-lg-0 flex-end">
-                <input class="form-control mr-sm-2" type="search" placeholder="Фильмы, персоны" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0 flex-end" action="${pageContext.request.contextPath}/find_film">
+                <input class="form-control mr-sm-2" type="search" name="need_film" placeholder="Найти фильм" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>
             </form>
+        </div>
         </div>
     </div>
 </nav>
@@ -82,13 +84,11 @@
                     </div>
                     <div class="panel-body">
                         <div class="text-center" id="author">
-                            <img src="<%=userAvatar%>"
-                                 alt="avatar">
+                            <img src="${pageContext.request.contextPath}/avatar?id=<%=user.getId()%>"
+                                 alt="avatar" style="width: 245px; height: 245px">
 
                             <h3><%=user.getFirstName()%> <%=user.getLastName()%>
                             </h3>
-
-                            <%--                            <p>статус...</p>--%>
                         </div>
                     </div>
                 </div>
@@ -146,16 +146,15 @@
                                 <h4 class="text-center"><strong>Редактирование</strong></h4>
                                 <br>
 
-                                <form action="${pageContext.request.contextPath}/profile" method="post"
+                                <form action="${pageContext.request.contextPath}/avatar" method="post"
                                       enctype="multipart/form-data">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" for="formControlFile1">
                                             Ваше фото</label>
-                                        <div class="col-sm-10">
-                                            <input type="file" name="avatar" class="form-control-file "
-                                                   id="formControlFile1"
-                                                   value="Выбрать файл">
+                                        <div class="col-sm-10 justify-content-between">
                                             <input type="hidden" name="userId" value="<%=user.getId()%>">
+                                            <input type="file" name="file" class="form-control-file"
+                                            id="formControlFile1">
                                             <button type="submit" class="btn btn-outline-primary shadow p-2 rounded">
                                                 Сохранить
                                             </button>
@@ -165,16 +164,17 @@
 
                                 <form action="${pageContext.request.contextPath}/profile" method="post"
                                       data-toggle="validator">
+                                    <input type="hidden" name="userId" value="<%=user.getId()%>">
                                     <div class="form-group row">
                                         <label for="firstName" class="col-sm-2 col-form-label">Имя</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="firstName">
+                                            <input type="text" class="form-control" id="firstName" name="firstName" value="<%=user.getFirstName()%>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="lastName" class="col-sm-2 col-form-label">Фамилия</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="lastName">
+                                            <input type="text" class="form-control" id="lastName" name="lastName" value="<%=user.getLastName()%>">
                                         </div>
                                     </div>
                                     <div class="form-group row help">
@@ -196,8 +196,9 @@
                                             <div class="help-block with-errors"></div>
                                         </div>
                                     </div>
-
-
+                                    <button type="submit" class="btn btn-outline-primary shadow p-2 rounded">
+                                        Сохранить
+                                    </button>
                                 </form>
 
                             </div>
