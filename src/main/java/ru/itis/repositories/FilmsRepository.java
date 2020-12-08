@@ -13,4 +13,5 @@ public interface FilmsRepository extends CrudRepository<Film>  {
     List<FilmRO> findFilmsByCountryName(String countryName);
     List<FilmRO> findGenresByFilmTitle(String filmTitle);
     List<FilmRO> findCountriesByFilmTitle(String filmTitle);
+    Long saveAndReturnId(Film entity);
 }

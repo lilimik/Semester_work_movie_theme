@@ -165,9 +165,9 @@
 
         <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
             <div class="justify-content-center">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav justify-content-between">
                     <% if (user != null) {%>
-                    <img src="/avatar?id=<%=user.getId()%>"
+                    <img src="${pageContext.request.contextPath}/avatar?id=<%=user.getId()%>"
                          alt="avatar" style="width: 50px; height: 50px;">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
@@ -199,6 +199,11 @@
                             Пользователи
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/films">
+                            Фильмы
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="d-flex justify-content-end">
@@ -215,7 +220,7 @@
 <div class="content">
     <div class="row-12 ">
         <div class="col-md-9" id="carousels">
-            
+
 
             <div class="col-md-3 text-center position-fixed second_div border-left border-dark pad_div2"
                  style="background-color: white; height: 100%">
@@ -233,11 +238,6 @@
                         <a class="nav-link" id="country" data-toggle="tab"
                            href="#for_country" role="tab"
                            aria-controls="profile" aria-selected="false">Страна</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="year" data-toggle="tab" href="#for_year"
-                           role="tab"
-                           aria-controls="contact" aria-selected="false">Год</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="restriction" data-toggle="tab"
@@ -318,48 +318,6 @@
                                         </div>
                                             <%}%>
 
-                                </fieldset>
-
-                            </div>
-                            <input type="submit" value="Найти">
-                        </form>
-
-                    </div>
-                    <div class="tab-pane fade" id="for_year" role="tabpanel"
-                         aria-labelledby="restriction">
-
-                        <form>
-
-                            <div class="col-form-label col-md-12 pt-0">
-                                <h4 class=" col-md-5 text-center"><b>Год выпуска:</b>
-                                </h4>
-                            </div>
-
-                            <div class="scroll pl-0" style="width: 105%; height: 380px">
-
-                                <fieldset class="form-group pt-3">
-                                    <div class="row text-left">
-
-                                        <fieldset class="form-group pt-3">
-                                            <div class="row text-left">
-
-                                                    <% for (int i = 1970; i <= 2020; i++) {%>
-                                                <div class="form-check col-md-12 row">
-                                                    <input class="form-check-input col-md-6"
-                                                           type="checkbox"
-                                                           name="gridRadios"
-                                                           id="year_<%=i%>"
-                                                           value="<%=i%>">
-                                                    <label class="form-check-label col-md-6"
-                                                           for="year_<%=i%>">
-                                                        <%=i%>
-                                                    </label>
-                                                </div>
-                                                    <%}%>
-
-                                        </fieldset>
-
-                                    </div>
                                 </fieldset>
 
                             </div>

@@ -1,5 +1,6 @@
 package ru.itis.services;
 
+import ru.itis.dto.FilmRO;
 import ru.itis.models.Film;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface FilmService {
     List<Film> findFilmsByCountryName(String countryName);
     List<String> findCountriesByFilmTitle(String filmTitle);
     List<Film> findFilmsByYear(Short year);
+    Long save(Film film);
 }

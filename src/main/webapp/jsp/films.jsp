@@ -1,8 +1,12 @@
 <%@ page import="ru.itis.models.User" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="ru.itis.models.Genre" %>
+<%@ page import="ru.itis.models.Country" %>
+<%@ page import="ru.itis.models.Restriction" %>
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Пользователи</title>
+    <title>Фильмы</title>
 
     <link rel="SHORTCUT ICON" href="WebContent/image/main_image.png">
 
@@ -22,63 +26,14 @@
     <script src="https://bootstraptema.ru/plugins/2015/b-v3-3-6/bootstrap.min.js"></script>
     <script src="https://bootstraptema.ru/plugins/2016/validator/validator.min.js"></script>
 
-    <script>
-        function renderTable(users, table) {
-
-            let innerHtml =
-                '<thead>\n' +
-                '   <tr>\n' +
-                '       <th scope="col">ID</th>' +
-                '       <th scope="col">Email</th>' +
-                '       <th scope="col">FirstName</th>' +
-                '       <th scope="col">LastName</th>' +
-                '   </tr>' +
-                '</thead>' +
-                '<tbody>';
-
-            for (let i = 0; i < users.length; i++) {
-                innerHtml += '<tr>';
-                innerHtml += '  <th scope="row">' + users[i]['id'] + '</th>';
-                innerHtml += '  <td>' + users[i]['email'] + '</td>';
-                innerHtml += '  <td>' + users[i]['firstName'] + '</td>';
-                innerHtml += '  <td>' + users[i]['lastName'] + '</td>';
-                innerHtml += '</tr>';
-            }
-
-            innerHtml += '</tbody>';
-            table.html(innerHtml);
-
-        }
-
-        function saveUser(email, firstName, lastName, password) {
-
-            let data = {
-                "email": email,
-                "firstName": firstName,
-                "lastName": lastName,
-                "password": password
-            };
-
-            $.ajax({
-                type: "POST", // метод запроса
-                url: "/users", // url запроса
-                data: JSON.stringify(data), // JSON-объект в JSON-строку
-                // что происходит, если запрос прошел успешно
-                success: function (response) {
-                    // рисуем таблицу на основе ответа на запрос
-                    renderTable(response, $('#table'))
-                },
-                // тип данных, который мы отправляем
-                dataType: "json",
-                contentType: "application/json"
-            })
-
-        }
-    </script>
 </head>
 <body>
+
 <%
-User user = (User) request.getAttribute("user");
+    User user = (User) request.getAttribute("user");
+    List<Genre> genres = (List<Genre>) request.getAttribute("genres");
+    List<Country> countries = (List<Country>) request.getAttribute("countries");
+    List<Restriction> restrictions = (List<Restriction>) request.getAttribute("restrictions");
 %>
 
 <div class="index">
@@ -156,35 +111,67 @@ User user = (User) request.getAttribute("user");
         <div class="row">
 
             <div class="col-md-offset-3 col-md-6">
-                <div class="container" style="width: 250px">
-                    <div class="form-group">
-                        <label for="email" class="text-white">Почта:</label>
-                        <input type="email" class="form-control" name="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="firstName" class="text-white">Имя:</label>
-                        <input type="text" class="form-control" name="firstName" id="firstName">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName" class="text-white">Фамилия:</label>
-                        <input type="text" class="form-control" name="lastName" id="lastName">
-                    </div>
-                    <div class="form-group">
-                        <label for="password" class="text-white">Пароль:</label>
-                        <input type="password" class="form-control" name="password" id="password" required>
-                    </div>
-                    <button class="btn btn-primary" onclick="saveUser($('#email').val(),
-                                                                  $('#firstName').val(),
-                                                                  $('#lastName').val(),
-                                                                  $('#password').val())">
-                        создать
-                    </button>
+                <div class="container" style="width: 300px">
+                    <form class="form-horizontal pb-1" data-toggle="validator" action="${pageContext.request.contextPath}/films" method="post">
+                        <div class="form-group">
+                            <label for="title" class="text-white">Название:</label>
+                            <input type="text" class="form-control" name="title" id="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="boxOffice" class="text-white">Кассовые сборы:</label>
+                            <input type="text" class="form-control" name="boxOffice" id="boxOffice" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="budget" class="text-white">Бюджет фильма:</label>
+                            <input type="text" class="form-control" name="budget" id="budget" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="text-white">Описание фильма:</label>
+                            <textarea class="form-control" name="description" id="description" rows="3"
+                                      required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="year" class="text-white">Год выпуска:</label>
+                            <select class="form-control" name="year" id="year" required>
+                                <%for (int i = 1895; i < 2020; i++) {%>
+                                <option><%=i%>
+                                </option>
+                                <%}%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="genres" class="text-white">Жанры:</label>
+                            <select multiple class="form-control" name="genresList" id="genres" required>
+                                <%for (Genre genre : genres) {%>
+                                <option><%=genre.getName()%>
+                                </option>
+                                <%}%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="countries" class="text-white">Страны:</label>
+                            <select multiple class="form-control" name="countryList" id="countries" required>
+                                <%for (Country country : countries) {%>
+                                <option><%=country.getName()%>
+                                </option>
+                                <%}%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="restriction" class="text-white">Ограничение по возрасту:</label>
+                            <select class="form-control" name="restriction" id="restriction" required>
+                                <%for (Restriction restriction : restrictions) {%>
+                                <option><%=restriction.getAge()%>
+                                </option>
+                                <%}%>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" type="submit">
+                            создать
+                        </button>
+                    </form>
                 </div>
                 <br>
-
-                <table id="table" class="text-white">
-
-                </table>
             </div>
         </div>
     </div>

@@ -41,7 +41,7 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
-    public void savePosterToStorage(InputStream file, String originalFileName, String storageFileName, String contentType, Long size) {
+    public void savePosterToStorage(InputStream file, Long filmId, String originalFileName, String storageFileName, String contentType, Long size) {
         FileInfo fileInfo = FileInfo.builder()
                 .fkId(Long.parseLong(storageFileName))
                 .originalName(originalFileName)
@@ -51,7 +51,7 @@ public class FilesServiceImpl implements FilesService {
 
         try {
             Files.copy(file, Paths.get("C:\\Users\\kazak\\IdeaProjects\\Semester\\src\\main\\webapp\\WebContent\\posters\\" + fileInfo.getFkId() + "." + fileInfo.getType().split("/")[1]));
-            avatarRepository.save(fileInfo);
+            posterRepository.save(fileInfo);
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }

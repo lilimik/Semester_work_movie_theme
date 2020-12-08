@@ -43,9 +43,9 @@ public class SemesterListener implements ServletContextListener {
         RestrictionsRepository restrictionsRepository = new RestrictionsRepositoryImpl(dataSource);
 
         RestrictionService restrictionService = new RestrictionServiceImpl(restrictionsRepository);
-        CountryService countryService = new CountryServiceImpl(countriesRepository);
-        GenreService genreService = new GenreServiceImpl(genresRepository);
-        FilmService filmService = new FilmServiceImpl(filmsRepository, filmGenresRepository, filmCountriesRepository , genreService, countryService);
+        CountryService countryService = new CountryServiceImpl(countriesRepository, filmCountriesRepository);
+        GenreService genreService = new GenreServiceImpl(genresRepository, filmGenresRepository);
+        FilmService filmService = new FilmServiceImpl(filmsRepository);
         CookieService cookieService = new CookieServiceImpl(cookiesRepository);
         FilesService filesService = new FilesServiceImpl(avatarRepository, posterRepository);
         UserService userService = new UserServiceImpl(usersRepository, passwordEncoder, cookieService, filesService);

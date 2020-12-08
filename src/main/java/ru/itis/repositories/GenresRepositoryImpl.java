@@ -21,6 +21,7 @@ public class GenresRepositoryImpl implements GenresRepository {
     private static final String SQL_FIND_BY_ID = "select * from genres where id = ?";
     private static final String SQL_DELETE_GENRE_BY_ID = "delete from genres where id = ?";
     private static final String SQL_INSERT_GENRE = "insert into genres(id, name) values (?, ?)";
+    private static final String SQL_FIND_ID_BY_GENRE = "select id from genres where name = ?";
 
     RowMapper<Genre> genreRowMapper = (row, rowNumber) -> Genre.builder()
             .id(row.getInt("id"))
@@ -49,5 +50,10 @@ public class GenresRepositoryImpl implements GenresRepository {
     @Override
     public List<Genre> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, genreRowMapper);
+    }
+
+    @Override
+    public Integer findIdByGenreName(String genreName) {
+        return jdbcTemplate.queryForObject(SQL_FIND_ID_BY_GENRE, Integer.class, genreName);
     }
 }

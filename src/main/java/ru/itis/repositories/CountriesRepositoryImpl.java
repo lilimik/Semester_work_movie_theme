@@ -17,10 +17,11 @@ public class CountriesRepositoryImpl implements CountriesRepository {
     }
 
     //Language=SQL
-    private static final String SQL_INSERT_COUNTRY = "insert into countries(name) values (?)";
+    private static final String SQL_INSERT_COUNTRY = "insert into countries(id, name) values (?, ?)";
     private static final String SQL_FIND_ALL = "select * from countries";
     private static final String SQL_DELETE_COUNTRY_BY_ID = "delete from countries where id = ?";
     private static final String SQL_FIND_COUNTRY_BY_ID = "select * from countries where id = ?";
+    private static final String SQL_FIND_ID_BY_COUNTRY = "select id from countries where name = ?";
 
     RowMapper<Country> countryRowMapper = (row, rowNumber) -> Country.builder()
             .id(row.getInt("id"))
@@ -29,7 +30,7 @@ public class CountriesRepositoryImpl implements CountriesRepository {
 
     @Override
     public void save(Country entity) {
-        jdbcTemplate.update(SQL_INSERT_COUNTRY, entity.getName());
+        jdbcTemplate.update(SQL_INSERT_COUNTRY, entity.getId(), entity.getName());
     }
 
     @Override
@@ -49,5 +50,10 @@ public class CountriesRepositoryImpl implements CountriesRepository {
     @Override
     public List<Country> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, countryRowMapper);
+    }
+
+    @Override
+    public Integer findIdByCountryName(String countryName) {
+        return jdbcTemplate.queryForObject(SQL_FIND_ID_BY_COUNTRY, Integer.class, countryName);
     }
 }

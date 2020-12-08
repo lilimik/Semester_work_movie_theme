@@ -8,7 +8,7 @@ import java.io.OutputStream;
 
 public interface FilesService {
     void saveAvatarToStorage(InputStream file, Long userId, String originalFileName, String storageFileName, String contentType, Long size) throws IOException;
-    void savePosterToStorage(InputStream file, String originalFileName, String storageFileName, String contentType, Long size) throws IOException;
+    void savePosterToStorage(InputStream file, Long filmId, String originalFileName, String storageFileName, String contentType, Long size) throws IOException;
     void writeFileToStorage(Long fkId, OutputStream outputStream);
     FileInfo getAvatarInfo(Long fkId);
     FileInfo getPosterInfo(Long fiId);

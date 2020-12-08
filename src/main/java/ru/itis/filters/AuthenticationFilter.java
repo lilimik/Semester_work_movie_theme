@@ -32,6 +32,8 @@ public class AuthenticationFilter implements Filter {
         boolean isAvatar = request.getRequestURI().equals("/avatar");
         boolean isUsers = request.getRequestURI().equals("/users");
         boolean isGenreForm = request.getRequestURI().equals("/genreForm");
+        boolean isPoster = request.getRequestURI().equals("/poster");
+        boolean isFilms = request.getRequestURI().equals("/films");
 
         if (sessionExists) {
             isAuthenticated = (Boolean) session.getAttribute("authenticated");
@@ -42,8 +44,9 @@ public class AuthenticationFilter implements Filter {
         }
 
         // если авторизован и запрашивает не логин или если не авторизован и запрашивает логин
-        if (isAuthenticated & (!isLoginPage & !isRegisterPage) || !isAuthenticated & (isLoginPage || isRegisterPage) ||
-                isStaticResource || isRootPage || isFilm || isFindFilm || isAvatar || isUsers || isGenreForm) {
+        if (isAuthenticated & (!isLoginPage & !isRegisterPage) || !isAuthenticated & (isLoginPage || isRegisterPage)
+                || isStaticResource || isRootPage || isFilm || isFindFilm || isAvatar || isUsers || isGenreForm
+                || isPoster || isFilms) {
             // отдаем ему то, что он хочет
             filterChain.doFilter(request, response);
         } else if (isAuthenticated & (isLoginPage || isRegisterPage)) {

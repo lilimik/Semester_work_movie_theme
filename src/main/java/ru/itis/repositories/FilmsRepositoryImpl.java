@@ -7,14 +7,18 @@ import ru.itis.models.Film;
 import ru.itis.repositories.utils.FilmsExtractor;
 
 import javax.sql.DataSource;
+import java.sql.*;
 import java.util.*;
 
 public class FilmsRepositoryImpl implements FilmsRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
+    private static Long pkFilmId = 101L;
 
     public FilmsRepositoryImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.dataSource = dataSource;
     }
 
     //Language=SQL
@@ -28,6 +32,7 @@ public class FilmsRepositoryImpl implements FilmsRepository {
     private static final String SQL_BY_GENRES = "g.name = ?";
     private static final String SQL_BY_COUNTRIES = "c.name = ?";
     private static final String SQL_FIND_GENRES_COUNTRIES_BY_FILM = "select f.*,g.name genre_name, c.name country_name from films f join film_genres fg on f.id = fg.film_id join genres g on fg.genre_id = g.id join film_countries fc on f.id = fc.film_id join countries c on fc.country_id = c.id where f.title = ?";
+    private static final String SQL_INSERT_FILM_AND_RETURN = "insert into films(id, title, box_office, budget, description, year, restriction_age) values (?, ?, ?, ?, ?, ?, ?)";
 
     RowMapper<Film> filmRowMapper = (row, rowNumber) -> Film.builder()
             .id(row.getLong("id"))
@@ -42,7 +47,6 @@ public class FilmsRepositoryImpl implements FilmsRepository {
 
     @Override
     public void save(Film entity) {
-        jdbcTemplate.update(SQL_INSERT_FILM, filmRowMapper);
     }
 
     @Override
@@ -92,5 +96,25 @@ public class FilmsRepositoryImpl implements FilmsRepository {
     @Override
     public List<FilmRO> findCountriesByFilmTitle(String filmTitle) {
         return jdbcTemplate.query(SQL_FIND_GENRES_COUNTRIES_BY_FILM, new FilmsExtractor(),filmTitle);
+    }
+
+    @Override
+    public Long saveAndReturnId(Film entity) {
+        try (Connection con = this.dataSource.getConnection()){
+            PreparedStatement ps = con.prepareStatement(SQL_INSERT_FILM_AND_RETURN);
+            ps.setLong(1, pkFilmId);
+            ps.setString(2, entity.getTitle());
+            ps.setLong(3, Long.parseLong(entity.getBoxOffice()));
+            ps.setLong(4, Long.parseLong(entity.getBudget()));
+            ps.setString(5, entity.getDescription());
+            ps.setShort(6, entity.getYear());
+            ps.setByte(7, entity.getRestriction());
+            ps.executeUpdate();
+            long id = pkFilmId;
+            pkFilmId++;
+            return id;
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

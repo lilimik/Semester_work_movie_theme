@@ -13,17 +13,9 @@ import java.util.Optional;
 public class FilmServiceImpl implements FilmService {
 
     private final FilmsRepository filmsRepository;
-    private final FilmGenresRepository filmGenresRepository;
-    private final FilmCountriesRepository filmCountriesRepository;
-    private final GenreService genreService;
-    private final CountryService countryService;
 
-    public FilmServiceImpl(FilmsRepository filmsRepository, FilmGenresRepository filmGenresRepository, FilmCountriesRepository filmCountriesRepository, GenreService genreService, CountryService countryService) {
+    public FilmServiceImpl(FilmsRepository filmsRepository) {
         this.filmsRepository = filmsRepository;
-        this.filmGenresRepository = filmGenresRepository;
-        this.filmCountriesRepository = filmCountriesRepository;
-        this.genreService = genreService;
-        this.countryService = countryService;
     }
 
     private List<Film> getFilmsFromFilmsRO(List<FilmRO> filmsRO) {
@@ -94,6 +86,11 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<Film> findFilmsByYear(Short year) {
         return filmsRepository.findFilmsByYear(year);
+    }
+
+    @Override
+    public Long save(Film film) {
+        return filmsRepository.saveAndReturnId(film);
     }
 
 }
