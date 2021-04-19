@@ -14,7 +14,7 @@ public class FilmsRepositoryImpl implements FilmsRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final DataSource dataSource;
-    private static Long pkFilmId = 101L;
+    private static Long pkFilmId = 102L;
 
     public FilmsRepositoryImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);

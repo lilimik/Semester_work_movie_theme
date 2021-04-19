@@ -1014,6 +1014,7 @@ sequence|table|131138|131140|1
     </table>
     <table id="45" parent="23" name="avatar">
       <ObjectId>147464</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
       <StateNumber>1093</StateNumber>
     </table>
@@ -1034,6 +1035,7 @@ sequence|table|131138|131140|1
     </table>
     <table id="49" parent="23" name="film_crew">
       <ObjectId>131146</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
       <StateNumber>973</StateNumber>
     </table>
@@ -1059,16 +1061,19 @@ sequence|table|131138|131140|1
     </table>
     <table id="54" parent="23" name="persons_images">
       <ObjectId>131112</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
       <StateNumber>957</StateNumber>
     </table>
     <table id="55" parent="23" name="poster">
       <ObjectId>147456</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
       <StateNumber>1096</StateNumber>
     </table>
     <table id="56" parent="23" name="restriction">
       <ObjectId>114696</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
       <StateNumber>762</StateNumber>
     </table>

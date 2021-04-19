@@ -3,7 +3,6 @@ package ru.itis.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.itis.dto.SignUpForm;
 import ru.itis.models.User;
-import ru.itis.services.FilesService;
 import ru.itis.services.UserService;
 
 import javax.servlet.ServletConfig;
