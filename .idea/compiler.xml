@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Semester" />
         <module name="semester" />
+        <module name="Semester_work_movie_theme" />
       </profile>
     </annotationProcessing>
   </component>
